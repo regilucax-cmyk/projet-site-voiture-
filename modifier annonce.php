@@ -22,21 +22,77 @@ if(isset($_POST['modifier'])){
 
     mysqli_query($conn,$sql);
 
-    echo "Annonce modifiee";
+    echo "Annonce modifiée";
 }
 
 ?>
 
-<form method="POST">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier annonce</title>
 
-    <!-- titre -->
-    <input
-    type="text"
-    name="title"
-    value="<?php echo $car['title']; ?>">
+    <!-- CSS simple étudiant -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-    <button name="modifier">
-        Modifier
-    </button>
+        .box {
+            width: 350px;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 50px;
+        }
 
-</form>
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 8px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #333;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <form method="POST">
+
+        <!-- titre -->
+        <input
+            type="text"
+            name="title"
+            value="<?php echo $car['title']; ?>">
+
+        <button name="modifier">
+            Modifier
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

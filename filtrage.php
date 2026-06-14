@@ -19,27 +19,98 @@ $result = mysqli_query($conn,$sql);
 
 ?>
 
-<form method="GET">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche voitures</title>
 
-    <!-- marque -->
-    <input type="text" name="brand" placeholder="Marque">
+    <!-- CSS simple étudiant -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-    <!-- prix -->
-    <input type="number" name="price" placeholder="Prix max">
+        .box {
+            width: 400px;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
 
-    <button type="submit">Rechercher</button>
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
 
-</form>
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
 
-<hr>
+        button {
+            padding: 8px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+        }
 
-<?php
+        button:hover {
+            background: #333;
+        }
 
-// afficher les annonces
-while($car = mysqli_fetch_assoc($result)){
+        .car {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
 
-    echo $car['title']."<br>";
-    echo $car['price']." €<br>";
-    echo "<hr>";
-}
-?>
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <form method="GET">
+
+        <!-- marque -->
+        <input type="text" name="brand" placeholder="Marque">
+
+        <!-- prix -->
+        <input type="number" name="price" placeholder="Prix max">
+
+        <button type="submit">Rechercher</button>
+
+    </form>
+
+    <hr>
+
+    <?php
+
+    // afficher les annonces
+    while($car = mysqli_fetch_assoc($result)){
+
+        echo "<div class='car'>";
+        echo "<strong>".$car['title']."</strong><br>";
+        echo "<span class='price'>".$car['price']." €</span>";
+        echo "</div>";
+    }
+
+    ?>
+
+</div>
+
+</body>
+</html>

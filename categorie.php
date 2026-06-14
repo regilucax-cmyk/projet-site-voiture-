@@ -19,29 +19,96 @@ $result = mysqli_query($conn,$sql);
 
 ?>
 
-<h2>Categories</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
 
-<form method="POST">
+    <!-- CSS simple étudiant -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-    <!-- nom categorie -->
-    <input
-    type="text"
-    name="name"
-    placeholder="Categorie">
+        .box {
+            width: 350px;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 40px;
+        }
 
-    <button name="ajouter">
-        Ajouter
-    </button>
+        h2 {
+            text-align: center;
+        }
 
-</form>
+        form {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
 
-<hr>
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
 
-<?php
+        button {
+            padding: 8px 12px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
 
-// afficher categories
-while($cat = mysqli_fetch_assoc($result)){
+        button:hover {
+            background: #333;
+        }
 
-    echo $cat['name']."<br>";
-}
-?>
+        .cat {
+            padding: 6px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <h2>Categories</h2>
+
+    <form method="POST">
+
+        <!-- nom categorie -->
+        <input
+            type="text"
+            name="name"
+            placeholder="Categorie">
+
+        <button name="ajouter">
+            Ajouter
+        </button>
+
+    </form>
+
+    <hr>
+
+    <?php
+    // afficher categories
+    while($cat = mysqli_fetch_assoc($result)){
+        echo "<div class='cat'>".$cat['name']."</div>";
+    }
+    ?>
+
+</div>
+
+</body>
+</html>

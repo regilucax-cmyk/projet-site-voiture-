@@ -26,27 +26,85 @@ if(isset($_POST['envoyer'])){
 
 // recuperer messages
 $sql = "SELECT * FROM messages";
-$result = mysqli_query($id,$sql);
+$result = mysqli_query($conn,$sql);
 
 ?>
 
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
 
-// afficher messages
-while($message = mysqli_fetch_assoc($result)){
+    <!-- CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
 
-    echo $message['content']."<br>";
-}
+        .chat-box {
+            width: 400px;
+            margin: auto;
+        }
 
-?>
+        .messages {
+            background: white;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
 
-<form method="POST">
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
 
-    <!-- message -->
-    <input type="text" name="content">
+        form {
+            display: flex;
+        }
 
-    <button name="envoyer">
-        Envoyer
-    </button>
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
 
-</form>
+        button {
+            padding: 8px 12px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="chat-box">
+
+    <div class="messages">
+
+        <?php
+        while($message = mysqli_fetch_assoc($result)){
+            echo "<div class='message'>".$message['content']."</div>";
+        }
+        ?>
+
+    </div>
+
+    <form method="POST">
+        <input type="text" name="content" placeholder="Écrire un message...">
+        <button name="envoyer">Envoyer</button>
+    </form>
+
+</div>
+
+</body>
+</html>

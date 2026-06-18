@@ -2,6 +2,11 @@
 
 include("connexion.php");
 
+// Vérification connexion
+if (!$conn) {
+    die("Erreur connexion base de données");
+}
+
 // user connecte
 $sender_id = 1;
 
@@ -12,21 +17,19 @@ $car_id = 1;
 $receiver_id = 2;
 
 // envoyer message
-if(isset($_POST['envoyer'])){
+if (isset($_POST['envoyer'])) {
 
-    $content = $_POST['content'];
+    $content = mysqli_real_escape_string($conn, $_POST['content']);
 
-    $sql = "INSERT INTO messages
-    (car_id,sender_id,receiver_id,content)
-    VALUES
-    ('$car_id','$sender_id','$receiver_id','$content')";
+    $sql = "INSERT INTO messages (car_id, sender_id, receiver_id, content)
+            VALUES ('$car_id', '$sender_id', '$receiver_id', '$content')";
 
-    mysqli_query($conn,$sql);
+    mysqli_query($conn, $sql);
 }
 
 // recuperer messages
 $sql = "SELECT * FROM messages";
-$result = mysqli_query($conn,$sql);
+$result = mysqli_query($conn, $sql);
 
 ?>
 
@@ -36,12 +39,10 @@ $result = mysqli_query($conn,$sql);
     <meta charset="UTF-8">
     <title>Chat</title>
 
-    <!-- CSS -->
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial;
             background: #f5f5f5;
-            margin: 0;
             padding: 20px;
         }
 
@@ -92,15 +93,17 @@ $result = mysqli_query($conn,$sql);
     <div class="messages">
 
         <?php
-        while($message = mysqli_fetch_assoc($result)){
-            echo "<div class='message'>".$message['content']."</div>";
+        if ($result) {
+            while ($message = mysqli_fetch_assoc($result)) {
+                echo "<div class='message'>" . htmlspecialchars($message['content']) . "</div>";
+            }
         }
         ?>
 
     </div>
 
     <form method="POST">
-        <input type="text" name="content" placeholder="Écrire un message...">
+        <input type="text" name="content" placeholder="Écrire un message..." required>
         <button name="envoyer">Envoyer</button>
     </form>
 

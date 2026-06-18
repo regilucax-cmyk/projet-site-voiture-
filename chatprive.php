@@ -1,19 +1,24 @@
 <?php
-
+session_start();
 include("connexion.php");
 
-// Vérification connexion
+// Vérifie connexion utilisateur
+if (!isset($_SESSION['user_id'])) {
+    header("Location: connexion.php");
+    exit();
+}
+
 if (!$conn) {
     die("Erreur connexion base de données");
 }
 
-// user connecte
-$sender_id = 1;
+// utilisateur connecté
+$sender_id = $_SESSION['user_id'];
 
-// annonce
+// annonce (exemple fixe, à adapter)
 $car_id = 1;
 
-// vendeur
+// vendeur (exemple fixe)
 $receiver_id = 2;
 
 // envoyer message
@@ -27,10 +32,9 @@ if (isset($_POST['envoyer'])) {
     mysqli_query($conn, $sql);
 }
 
-// recuperer messages
-$sql = "SELECT * FROM messages";
+// récupérer messages (triés)
+$sql = "SELECT * FROM messages WHERE car_id='$car_id' ORDER BY id ASC";
 $result = mysqli_query($conn, $sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +93,7 @@ $result = mysqli_query($conn, $sql);
 <body>
 
 <div class="chat-box">
-git
+
     <div class="messages">
 
         <?php

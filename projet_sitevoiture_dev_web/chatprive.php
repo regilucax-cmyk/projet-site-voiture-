@@ -89,7 +89,7 @@ $result = mysqli_query($conn, $sql);
 <body>
 
 <div class="chat-box">
-
+git
     <div class="messages">
 
         <?php

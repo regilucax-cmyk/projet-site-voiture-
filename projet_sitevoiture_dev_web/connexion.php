@@ -15,7 +15,6 @@ if (isset($_POST['connexion'])) {
         header("location: liste annonce.php");
         exit;
     } else {
-        trigger_error("Erreur de connexion : " . $erreur);
         $erreur = "Email ou mot de passe incorrect.";
     }
 }

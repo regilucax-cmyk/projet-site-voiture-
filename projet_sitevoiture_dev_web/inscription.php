@@ -7,7 +7,7 @@ if (isset($_POST['inscrire'])) {
     $prenom = $_POST['prenom'];
     $username = $_POST['username'];
     $age = $_POST['age'];
-    $requete = "SELECT * FROM users WHERE email='$email' , username='$username'";
+    $requete = "SELECT * FROM users WHERE email='$email' OR username='$username'";
     $resultat = mysqli_query($id, $requete);
     if (mysqli_num_rows($resultat) > 0) {
         $erreur = "Email ou pseudo deja utilise.";
@@ -83,7 +83,7 @@ if (isset($_POST['inscrire'])) {
 </head>
 <body>
 <div class="page">
-    <h3>Inscription</h3>
+    <h3>Inscris toi sur achète ta bagnole , Allez vas-y!!!</h3>
     <?php if (isset($message)) { echo '<p>' . htmlspecialchars($message) . '</p>'; } ?>
     <?php if (isset($erreur)) { echo '<p class="error">' . htmlspecialchars($erreur) . '</p>'; } ?>
     <?php if (isset($erreur2)) { echo '<p class="error">' . htmlspecialchars($erreur2) . '</p>'; } ?>

@@ -5,9 +5,7 @@ session_start();
 // Étape 2 : connexion à la base de données
 $conn = mysqli_connect("localhost", "root", "root", "sitevoiture");
 
-// Étape 3 : on récupère toutes les annonces
-// On utilise un JOIN pour aller chercher le NOM de la catégorie
-// (sinon on aurait juste un numéro d'id, pas très lisible)
+
 $sql = "SELECT a.*, c.name AS categorie_name
         FROM annonces a
         LEFT JOIN categories c ON a.categorie = c.id
@@ -21,7 +19,7 @@ $result = mysqli_query($conn, $sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Hub</title>
+    <title>Car HUB</title>
     <style>
         body {
             margin: 0;
@@ -36,7 +34,7 @@ $result = mysqli_query($conn, $sql);
             padding: 20px;
         }
 
-        /* En-tête du site */
+        
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -68,7 +66,7 @@ $result = mysqli_query($conn, $sql);
             background: #eee;
         }
 
-        /* Menu de navigation vers les pages des camarades */
+       
         .nav-links {
             display: flex;
             gap: 12px;
@@ -90,7 +88,7 @@ $result = mysqli_query($conn, $sql);
             background: #eee;
         }
 
-        /* Liste des annonces en cartes */
+        
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -165,7 +163,7 @@ $result = mysqli_query($conn, $sql);
 
 <div class="container">
 
-    <!-- En-tête : nom du site + connexion / inscription / déconnexion -->
+    <
     <div class="topbar">
 
         <div class="brand">Le Hub</div>
@@ -189,7 +187,7 @@ $result = mysqli_query($conn, $sql);
 
     </div>
 
-    <!-- Menu : liens vers les pages faites par mes camarades -->
+    
     <div class="nav-links">
 
         <a href="liste annonce.php">Accueil</a>
@@ -227,7 +225,7 @@ $result = mysqli_query($conn, $sql);
                     <p class="price"><?php echo $annonce['prix']; ?> €</p>
 
                     <?php
-                        // Si l'annonce n'a pas de catégorie liée, on affiche un texte par défaut
+                        
                         $nom_categorie = $annonce['categorie_name'];
                         if (!$nom_categorie) {
                             $nom_categorie = "Non classée";
@@ -239,10 +237,10 @@ $result = mysqli_query($conn, $sql);
 
                     <div class="card-actions">
 
-                        <a href="detail_annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Voir</a>
+                        <a href="detail annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Voir</a>
 
                         <?php
-                            // On affiche Modifier / Supprimer seulement si c'est l'auteur de l'annonce
+                            
                             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $annonce['idUtilisateur']) {
                         ?>
                             <a href="modifier annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Modifier</a>

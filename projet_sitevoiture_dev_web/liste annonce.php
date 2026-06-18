@@ -45,25 +45,49 @@ $result = mysqli_query($conn, $sql);
         .brand {
             font-size: 24px;
             font-weight: bold;
+            color : red;
+            border : 1px solid #cfd8e3;
+            border-radius: 8px;
+            background: #f8fafc;
+            padding: 8px 12px;
         }
 
         .user-box {
             display: flex;
             gap: 10px;
             align-items: center;
+            padding: 10px 16px;
+            border: 1px solid #cfd8e3;
+            border-radius: 10px;
+            background: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .user-box:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            border-color: #a3b8d3;
+        }
+
+        .user-box span {
+            font-weight: 600;
+            color: #1e3a5f;
+            white-space: nowrap;
         }
 
         .user-box a {
             text-decoration: none;
-            color: #333;
+            color: #334155;
             padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #f8fafc;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         .user-box a:hover {
-            background: #eee;
+            background: #e2e8f0;
+            color: #0f172a;
         }
 
        
@@ -78,7 +102,7 @@ $result = mysqli_query($conn, $sql);
             color: #333;
             text-decoration: none;
             font-size: 14px;
-            padding: 10px 14px;
+            padding: 10px 14px; 
             border: 1px solid #ccc;
             border-radius: 3px;
             background: #fff;
@@ -157,22 +181,37 @@ $result = mysqli_query($conn, $sql);
         .card-actions a:hover {
             background: #555;
         }
+        .user-name {
+            color: #1e3a5f;
+            font-size: 14px;
+            margin-right: 10px;
+            padding: 8px 12px;
+            border: 1px solid #cfd8e3;
+            border-radius: 8px;
+            background: #f8fafc;
+            display: inline-flex;
+            align-items: center;
+        }
+        .user-name strong {
+            color: #334155;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <
+     
     <div class="topbar">
 
-        <div class="brand">Le Hub</div>
+        <div class="brand">LE CAR HUB</div>
 
         <div class="user-box">
 
             <?php if (isset($_SESSION['username'])) { ?>
 
-                <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                <div class="user-name">Est connecté en tant que <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong></div>
                 <a href="chatprive.php">Messages</a>
                 <a href="deconnexion.php">Déconnexion</a>
 

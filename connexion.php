@@ -1,13 +1,13 @@
 <?php
 session_start();
-$id = mysqli_connect("localhost", "root", "root", "sitevoiture");
+$conn = mysqli_connect("localhost", "root", "root", "sitevoiture");
 if (isset($_POST['connexion'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
     $requete = "SELECT * FROM users WHERE email='$email' and password='$password'";
    
-    $resultat = mysqli_query($id, $requete);
+$resultat = mysqli_query($conn, $requete);
     if (mysqli_num_rows($resultat) > 0) {
         $user = mysqli_fetch_assoc($resultat);
         $_SESSION['prenom'] = $user['prenom'];

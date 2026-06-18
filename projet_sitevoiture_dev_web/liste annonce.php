@@ -1,0 +1,265 @@
+<?php
+// Étape 1 : on démarre la session pour savoir si quelqu'un est connecté
+session_start();
+
+// Étape 2 : connexion à la base de données
+$conn = mysqli_connect("localhost", "root", "root", "sitevoiture");
+
+// Étape 3 : on récupère toutes les annonces
+// On utilise un JOIN pour aller chercher le NOM de la catégorie
+// (sinon on aurait juste un numéro d'id, pas très lisible)
+$sql = "SELECT a.*, c.name AS categorie_name
+        FROM annonces a
+        LEFT JOIN categories c ON a.categorie = c.id
+        ORDER BY a.created_at DESC";
+
+$result = mysqli_query($conn, $sql);
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Hub</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* En-tête du site */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .user-box a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .user-box a:hover {
+            background: #eee;
+        }
+
+        /* Menu de navigation vers les pages des camarades */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .nav-links a:hover {
+            background: #eee;
+        }
+
+        /* Liste des annonces en cartes */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-image {
+            height: 180px;
+            background: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        .card-body h2 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .price {
+            color: green;
+            font-weight: bold;
+            margin: 0 0 8px;
+        }
+
+        .meta {
+            color: #555;
+            font-size: 14px;
+            margin: 0 0 10px;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .card-actions a {
+            text-decoration: none;
+            padding: 8px 12px;
+            color: #fff;
+            background: #333;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .card-actions a:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- En-tête : nom du site + connexion / inscription / déconnexion -->
+    <div class="topbar">
+
+        <div class="brand">Le Hub</div>
+
+        <div class="user-box">
+
+            <?php if (isset($_SESSION['username'])) { ?>
+
+                <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                <a href="chatprive.php">Messages</a>
+                <a href="deconnexion.php">Déconnexion</a>
+
+            <?php } else { ?>
+
+                <a href="connexion.php">Connexion</a>
+                <a href="inscription.php">Inscription</a>
+
+            <?php } ?>
+
+        </div>
+
+    </div>
+
+    <!-- Menu : liens vers les pages faites par mes camarades -->
+    <div class="nav-links">
+
+        <a href="liste annonce.php">Accueil</a>
+        <a href="categorie.php">Catégories</a>
+        <a href="favoris.php">Favoris</a>
+        <a href="filtrage.php">Filtrer</a>
+
+        <?php if (isset($_SESSION['user_id'])) { ?>
+            <a href="creer annonce.php">Déposer une annonce</a>
+        <?php } else { ?>
+            <a href="connexion.php">Déposer une annonce</a>
+        <?php } ?>
+
+    </div>
+
+    <!-- Affichage de toutes les annonces -->
+    <div class="cards">
+
+        <?php while ($annonce = mysqli_fetch_assoc($result)) { ?>
+
+            <div class="card">
+
+                <div class="card-image">
+                    <?php if (!empty($annonce['image'])) { ?>
+                        <img src="images/<?php echo htmlspecialchars($annonce['image']); ?>">
+                    <?php } else { ?>
+                        <span>Pas de photo</span>
+                    <?php } ?>
+                </div>
+
+                <div class="card-body">
+
+                    <h2><?php echo htmlspecialchars($annonce['titre']); ?></h2>
+
+                    <p class="price"><?php echo $annonce['prix']; ?> €</p>
+
+                    <?php
+                        // Si l'annonce n'a pas de catégorie liée, on affiche un texte par défaut
+                        $nom_categorie = $annonce['categorie_name'];
+                        if (!$nom_categorie) {
+                            $nom_categorie = "Non classée";
+                        }
+                    ?>
+                    <p class="meta">Catégorie : <?php echo htmlspecialchars($nom_categorie); ?></p>
+
+                    <p><?php echo htmlspecialchars($annonce['description']); ?></p>
+
+                    <div class="card-actions">
+
+                        <a href="detail_annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Voir</a>
+
+                        <?php
+                            // On affiche Modifier / Supprimer seulement si c'est l'auteur de l'annonce
+                            if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $annonce['idUtilisateur']) {
+                        ?>
+                            <a href="modifier annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Modifier</a>
+                            <a href="supprimer annonce.php?id=<?php echo $annonce['annonce_id']; ?>">Supprimer</a>
+                        <?php } ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <?php } ?>
+
+    </div>
+
+</div>
+
+</body>
+</html>

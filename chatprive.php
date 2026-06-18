@@ -1,46 +1,36 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 include("connexion.php");
 
+// si pas connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: connexion.php");
-    exit();
+    die("Tu dois être connecté pour accéder au chat");
 }
 
-$sender_id = $_SESSION['user_id'];
-$car_id = isset($_GET['car_id']) ? intval($_GET['car_id']) : 1;
+$user_id = $_SESSION['user_id'];
 
-// récupérer vendeur (exemple simple)
+// test simple (tu peux remplacer après)
 $receiver_id = 2;
+$car_id = 1;
 
 // envoyer message
 if (isset($_POST['envoyer'])) {
 
-    $content = trim($_POST['content']);
+    $content = mysqli_real_escape_string($conn, $_POST['content']);
 
-    if (!empty($content)) {
+    $sql = "INSERT INTO messages (car_id, sender_id, receiver_id, content)
+            VALUES ('$car_id', '$user_id', '$receiver_id', '$content')";
 
-        $sql = "INSERT INTO messages (car_id, sender_id, receiver_id, content)
-                VALUES (?, ?, ?, ?)";
-
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "iiis", $car_id, $sender_id, $receiver_id, $content);
-        mysqli_stmt_execute($stmt);
-    }
+    mysqli_query($conn, $sql);
 }
 
-// messages filtrés
+// récupérer messages (IMPORTANT: filtré)
 $sql = "SELECT * FROM messages
-        WHERE car_id = ?
-        ORDER BY id ASC";
+        WHERE car_id = $car_id
+        ORDER BY sent_at ASC";
 
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $car_id);
-mysqli_stmt_execute($stmt);
+$result = mysqli_query($conn, $sql);
 
-$result = mysqli_stmt_get_result($stmt);
 ?>
 
 <!DOCTYPE html>
@@ -51,24 +41,29 @@ $result = mysqli_stmt_get_result($stmt);
 
     <style>
         body { font-family: Arial; background:#f5f5f5; padding:20px; }
+
         .chat-box { width:400px; margin:auto; }
+
         .messages {
             background:white;
             padding:10px;
             height:300px;
             overflow-y:auto;
             border:1px solid #ccc;
+            margin-bottom:10px;
         }
+
         .message {
-            margin:5px 0;
-            padding:6px;
-            background:#eee;
-            border-radius:5px;
+            padding:5px;
+            border-bottom:1px solid #eee;
         }
-        form { display:flex; margin-top:10px; }
+
+        form { display:flex; }
+
         input { flex:1; padding:8px; }
+
         button {
-            padding:8px 12px;
+            padding:8px;
             background:black;
             color:white;
             border:none;
@@ -80,18 +75,29 @@ $result = mysqli_stmt_get_result($stmt);
 
 <div class="chat-box">
 
+    <h3>Chat</h3>
+
     <div class="messages">
 
-        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-            <div class="message">
-                <?= htmlspecialchars($row['content']) ?>
-            </div>
-        <?php } ?>
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+
+            while ($m = mysqli_fetch_assoc($result)) {
+
+                echo "<div class='message'>"
+                    . htmlspecialchars($m['content']) .
+                "</div>";
+            }
+
+        } else {
+            echo "Aucun message";
+        }
+        ?>
 
     </div>
 
     <form method="POST">
-        <input type="text" name="content" placeholder="Écrire un message..." required>
+        <input type="text" name="content" placeholder="Écrire..." required>
         <button name="envoyer">Envoyer</button>
     </form>
 

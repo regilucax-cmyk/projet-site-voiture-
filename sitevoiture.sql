@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : lun. 15 juin 2026 à 19:02
+-- Généré le : jeu. 18 juin 2026 à 23:14
 -- Version du serveur : 5.7.24
 -- Version de PHP : 8.3.1
 
@@ -24,6 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `annonces`
+--
+
+CREATE TABLE `annonces` (
+  `annonce_id` int(11) NOT NULL,
+  `idUtilisateur` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `categorie` int(11) NOT NULL,
+  `prix` decimal(10,2) NOT NULL,
+  `description` text,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `cars`
 --
 
@@ -39,24 +56,6 @@ CREATE TABLE `cars` (
   `price` decimal(10,2) NOT NULL,
   `description` text,
   `status` enum('active','sold','deleted') DEFAULT 'active',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
--- Structure de la table `create_annonces`
---
-
-CREATE TABLE `annonces` (
-  `annonce_id` int(11) AUTO_INCREMENT PRIMARY KEY,
-  `idUtilisateur` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `categorie` int(11) NOT NULL,
-  `prix` decimal(10,2) NOT NULL,
-  `description` text,
-  `image` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -94,6 +93,13 @@ CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`) VALUES
+(1, 'Ordinateur ');
 
 -- --------------------------------------------------------
 
@@ -139,16 +145,14 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id`, `email`, `password`, `username`, `prenom`, `nom`, `age`) VALUES
-(6, 'non@hotmail.com', 'yes', 'yes', 'connard', 'charle', NULL),
-(7, 'moreloceane44@gmail.com', 'Jesusmonsauveur.17', 'oce dans la place', 'Oceane', 'Morel', 18);
-
---
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `annonces`
+--
+ALTER TABLE `annonces`
+  ADD PRIMARY KEY (`annonce_id`);
 
 --
 -- Index pour la table `cars`
@@ -205,6 +209,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT pour la table `annonces`
+--
+ALTER TABLE `annonces`
+  MODIFY `annonce_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT pour la table `cars`
 --
 ALTER TABLE `cars`
@@ -220,19 +230,19 @@ ALTER TABLE `car_images`
 -- AUTO_INCREMENT pour la table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Contraintes pour les tables déchargées

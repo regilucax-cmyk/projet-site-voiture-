@@ -2,7 +2,7 @@
 $host = "localhost";
 $dbname = "projet_sitevoiture";
 $user = "root";
-$pass = "";
+$pass = "root"; // <-- IMPORTANT SUR MAMP
 
 $conn = mysqli_connect($host, $user, $pass, $dbname);
 

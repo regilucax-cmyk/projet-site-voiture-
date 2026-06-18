@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $conn = mysqli_connect("localhost", "root", "root", "sitevoiture");
 if (isset($_POST['connexion'])) {
     $email = $_POST['email'];
@@ -10,8 +12,7 @@ if (isset($_POST['connexion'])) {
 $resultat = mysqli_query($conn, $requete);
     if (mysqli_num_rows($resultat) > 0) {
         $user = mysqli_fetch_assoc($resultat);
-        $_SESSION['prenom'] = $user['prenom'];
-        $_SESSION['nom'] = $user['nom'];
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         header("location: liste annonce.php");
     } else {

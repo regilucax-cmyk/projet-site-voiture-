@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$dbname = "projet_sitevoiture";
+$dbname = "sitevoiture";
 $user = "root";
 $pass = "root"; // <-- IMPORTANT SUR MAMP
 

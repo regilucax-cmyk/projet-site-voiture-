@@ -33,7 +33,7 @@ if(isset($_POST['modifier'])){
     <meta charset="UTF-8">
     <title>Modifier annonce</title>
 
-    <!-- CSS simple étudiant -->
+   
     <style>
         body {
             font-family: Arial, sans-serif;

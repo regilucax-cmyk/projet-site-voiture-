@@ -25,7 +25,7 @@ $result = mysqli_query($conn,$sql);
     <meta charset="UTF-8">
     <title>Recherche voitures</title>
 
-    <!-- CSS simple étudiant -->
+    
     <style>
         body {
             font-family: Arial, sans-serif;
